@@ -16,10 +16,17 @@ namespace NetPressBlog.Controllers
         private NetPressDBEntity1 db = new NetPressDBEntity1();
 
         // GET: Posts
+        [Authorize]
         public ActionResult Index()
         {
-            var blogInfoes = db.BlogInfoes.Include(b => b.AspNetUser).Include(b => b.Category);
-            return View(blogInfoes.ToList());
+
+            var blogInfo = db.BlogInfoes.Include(b => b.Category);
+            string currUser = User.Identity.GetUserId();
+            var user = blogInfo.Where(b => b.Author_Id == currUser);/*from b in blogInfoes
+                       where (b.Author_Id == User.Identity.GetUserId())
+                       select b;*/
+
+            return View(user.ToList());
         }
 
         // GET: Posts/Details/5
@@ -38,6 +45,7 @@ namespace NetPressBlog.Controllers
         }
 
         // GET: Posts/Create
+        [Authorize]
         public ActionResult Create(string submit)
         {
             ViewBag.Author_Id = new SelectList(db.AspNetUsers, "Id", "Email");
@@ -80,6 +88,7 @@ namespace NetPressBlog.Controllers
         }
 
         // GET: Posts/Edit/5
+        [Authorize]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -87,7 +96,7 @@ namespace NetPressBlog.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             BlogInfo blogInfo = db.BlogInfoes.Find(id);
-            if (blogInfo == null)
+            if ((blogInfo == null) || (blogInfo.Author_Id != User.Identity.GetUserId())) //Checks if there is 
             {
                 return HttpNotFound();
             }
@@ -105,7 +114,9 @@ namespace NetPressBlog.Controllers
         {
             if (ModelState.IsValid)
             {
+                blogInfo.LastModified = DateTime.Now;
                 db.Entry(blogInfo).State = EntityState.Modified;
+          
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -115,6 +126,7 @@ namespace NetPressBlog.Controllers
         }
 
         // GET: Posts/Delete/5
+        [Authorize]
         public ActionResult Delete(int? id)
         {
             if (id == null)

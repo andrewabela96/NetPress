@@ -12,7 +12,7 @@
                     <h1>@Model.Title</h1>
                     <h2 class="subheading">@Model.Subtitle</h2>
                     <div class="buttonrightfull">
-                        <a href="@Url.Action("Index", "Categories", new {id = Model.Category_Id})" class="btn btn-default" role="button">
+                        <a href="@Url.Action("Index", "Category", new {id = Model.Category_Id})" class="btn btn-default" role="button">
                             @Model.Category.Type
                         </a>
                     </div>
