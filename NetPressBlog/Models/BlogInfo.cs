@@ -11,12 +11,15 @@ namespace NetPressBlog.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
     public partial class BlogInfo
     {
         public int Id { get; set; }
+
+        [Required(ErrorMessage = "The field Title cannot be left empty")]
         public string Title { get; set; }
         public string Subtitle { get; set; }
+        [Required(ErrorMessage = "The field Text cannot be left empty")]
         public string Text { get; set; }
         public System.DateTime DateCreated { get; set; }
         public Nullable<System.DateTime> LastModified { get; set; }
