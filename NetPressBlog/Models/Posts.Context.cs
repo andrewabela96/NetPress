@@ -13,10 +13,10 @@ namespace NetPressBlog.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class NetPressDBEntity : DbContext
+    public partial class NetPressDBEntity1 : DbContext
     {
-        public NetPressDBEntity()
-            : base("name=NetPressDBEntity")
+        public NetPressDBEntity1()
+            : base("name=NetPressDBEntity1")
         {
         }
     

@@ -78,7 +78,7 @@
           <Property Name="LastModified" Type="datetime" />
           <Property Name="Status" Type="smallint" Nullable="false" />
           <Property Name="Category_Id" Type="int" Nullable="false" />
-          <Property Name="Author_Id" Type="int" Nullable="false" />
+          <Property Name="Author_Id" Type="nvarchar" MaxLength="128" Nullable="false" />
         </EntityType>
         <EntityType Name="Category">
           <Key>
@@ -97,6 +97,18 @@
             </Principal>
             <Dependent Role="BlogInfo">
               <PropertyRef Name="Category_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BlogInfo_Users">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+          <End Role="BlogInfo" Type="Self.BlogInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="BlogInfo">
+              <PropertyRef Name="Author_Id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -167,6 +179,10 @@
           <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_BlogInfo_Category" Association="Self.FK_BlogInfo_Category">
             <End Role="Category" EntitySet="Category" />
+            <End Role="BlogInfo" EntitySet="BlogInfo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BlogInfo_Users" Association="Self.FK_BlogInfo_Users">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="BlogInfo" EntitySet="BlogInfo" />
           </AssociationSet>
           <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
@@ -248,6 +264,7 @@
           <Property Name="UserName" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="AspNetUserClaims" Relationship="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUsers" ToRole="AspNetUserClaims" />
           <NavigationProperty Name="AspNetUserLogins" Relationship="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUsers" ToRole="AspNetUserLogins" />
+          <NavigationProperty Name="BlogInfoes" Relationship="Self.FK_BlogInfo_Users" FromRole="AspNetUsers" ToRole="BlogInfo" />
           <NavigationProperty Name="AspNetRoles" Relationship="Self.AspNetUserRoles" FromRole="AspNetUsers" ToRole="AspNetRoles" />
         </EntityType>
         <EntityType Name="BlogInfo">
@@ -262,7 +279,8 @@
           <Property Name="LastModified" Type="DateTime" Precision="3" />
           <Property Name="Status" Type="Int16" Nullable="false" />
           <Property Name="Category_Id" Type="Int32" Nullable="false" />
-          <Property Name="Author_Id" Type="Int32" Nullable="false" />
+          <Property Name="Author_Id" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="AspNetUser" Relationship="Self.FK_BlogInfo_Users" FromRole="BlogInfo" ToRole="AspNetUsers" />
           <NavigationProperty Name="Category" Relationship="Self.FK_BlogInfo_Category" FromRole="BlogInfo" ToRole="Category" />
         </EntityType>
         <EntityType Name="Category">
@@ -302,6 +320,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_BlogInfo_Users">
+          <End Role="AspNetUsers" Type="Self.AspNetUser" Multiplicity="1" />
+          <End Role="BlogInfo" Type="Self.BlogInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="BlogInfo">
+              <PropertyRef Name="Author_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_BlogInfo_Category">
           <End Role="Category" Type="Self.Category" Multiplicity="1" />
           <End Role="BlogInfo" Type="Self.BlogInfo" Multiplicity="*" />
@@ -318,7 +348,7 @@
           <End Role="AspNetRoles" Type="Self.AspNetRole" Multiplicity="*" />
           <End Role="AspNetUsers" Type="Self.AspNetUser" Multiplicity="*" />
         </Association>
-        <EntityContainer Name="NetPressDBEntity" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="NetPressDBEntity1" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="C__MigrationHistory" EntityType="Self.C__MigrationHistory" />
           <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRole" />
           <EntitySet Name="AspNetUserClaims" EntityType="Self.AspNetUserClaim" />
@@ -334,6 +364,10 @@
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="AspNetUserLogins" EntitySet="AspNetUserLogins" />
           </AssociationSet>
+          <AssociationSet Name="FK_BlogInfo_Users" Association="Self.FK_BlogInfo_Users">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="BlogInfo" EntitySet="BlogInfoes" />
+          </AssociationSet>
           <AssociationSet Name="FK_BlogInfo_Category" Association="Self.FK_BlogInfo_Category">
             <End Role="Category" EntitySet="Categories" />
             <End Role="BlogInfo" EntitySet="BlogInfoes" />
@@ -348,7 +382,7 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="NetPressDBModelStoreContainer" CdmEntityContainer="NetPressDBEntity">
+        <EntityContainerMapping StorageEntityContainer="NetPressDBModelStoreContainer" CdmEntityContainer="NetPressDBEntity1">
           <EntitySetMapping Name="C__MigrationHistory">
             <EntityTypeMapping TypeName="NetPressDBModel.C__MigrationHistory">
               <MappingFragment StoreEntitySet="__MigrationHistory">

@@ -7,17 +7,18 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using NetPressBlog.Models;
+using Microsoft.AspNet.Identity;
 
 namespace NetPressBlog.Controllers
 {
     public class PostsController : Controller
     {
-        private NetPressDBEntity db = new NetPressDBEntity();
+        private NetPressDBEntity1 db = new NetPressDBEntity1();
 
         // GET: Posts
         public ActionResult Index()
         {
-            var blogInfoes = db.BlogInfoes.Include(b => b.Category);
+            var blogInfoes = db.BlogInfoes.Include(b => b.AspNetUser).Include(b => b.Category);
             return View(blogInfoes.ToList());
         }
 
@@ -37,8 +38,9 @@ namespace NetPressBlog.Controllers
         }
 
         // GET: Posts/Create
-        public ActionResult Create()
+        public ActionResult Create(string submit)
         {
+            ViewBag.Author_Id = new SelectList(db.AspNetUsers, "Id", "Email");
             ViewBag.Category_Id = new SelectList(db.Categories, "Id", "Type");
             return View();
         }
@@ -48,10 +50,26 @@ namespace NetPressBlog.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [ValidateInput(false)]
         public ActionResult Create([Bind(Include = "Id,Title,Subtitle,Text,DateCreated,LastModified,Status,Category_Id,Author_Id")] BlogInfo blogInfo)
         {
             if (ModelState.IsValid)
             {
+                string submit = Request["Submit"];
+                switch (submit)
+                {
+                    case "Publish":
+                        blogInfo.Status = 1;
+                        break;
+                    case "Draft":
+                        blogInfo.Status = 2;
+                        break;
+                    default:
+                        blogInfo.Status = 2;
+                        break;
+                }
+                blogInfo.DateCreated = DateTime.Now;
+                blogInfo.Author_Id = User.Identity.GetUserId();
                 db.BlogInfoes.Add(blogInfo);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -73,6 +91,7 @@ namespace NetPressBlog.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.Author_Id = new SelectList(db.AspNetUsers, "Id", "Email", blogInfo.Author_Id);
             ViewBag.Category_Id = new SelectList(db.Categories, "Id", "Type", blogInfo.Category_Id);
             return View(blogInfo);
         }
@@ -90,6 +109,7 @@ namespace NetPressBlog.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+            ViewBag.Author_Id = new SelectList(db.AspNetUsers, "Id", "Email", blogInfo.Author_Id);
             ViewBag.Category_Id = new SelectList(db.Categories, "Id", "Type", blogInfo.Category_Id);
             return View(blogInfo);
         }

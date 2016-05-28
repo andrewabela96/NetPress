@@ -22,8 +22,9 @@ namespace NetPressBlog.Models
         public Nullable<System.DateTime> LastModified { get; set; }
         public short Status { get; set; }
         public int Category_Id { get; set; }
-        public int Author_Id { get; set; }
+        public string Author_Id { get; set; }
     
+        public virtual AspNetUser AspNetUser { get; set; }
         public virtual Category Category { get; set; }
     }
 }

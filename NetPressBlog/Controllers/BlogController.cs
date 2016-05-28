@@ -63,7 +63,6 @@ namespace NetPressBlog.Controllers
                                     break;
                 }
                 blogInfo.DateCreated = DateTime.Now;
-                blogInfo.Author_Id = 1;
                 db.BlogInfoes.Add(blogInfo);
                 db.SaveChanges();
                 return RedirectToAction("Index");

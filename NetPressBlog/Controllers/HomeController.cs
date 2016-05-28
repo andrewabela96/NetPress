@@ -10,7 +10,7 @@ namespace NetPressBlog.Controllers
 {
     public class HomeController : Controller
     {
-        private NetPressDBEntity db = new NetPressDBEntity();
+        private NetPressDBEntity1 db = new NetPressDBEntity1();
 
         public ActionResult Index()
         {

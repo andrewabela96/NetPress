@@ -1,39 +1,50 @@
-﻿@model IEnumerable<NetPressBlog.Models.Category>
+﻿@model IEnumerable<NetPressBlog.Models.BlogInfo>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = Model.First().Category.Type;
 }
 
-<h2>Index</h2>
+<!-- Page Header -->
+<!-- Set your background image for this header on the line below. -->
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="site-heading">
+                    <h1>@Model.First().Category.Type</h1>
+                    <hr class="small">
+                    <span class="subheading">@Model.First().Category.Description</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Type)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Description)
-        </th>
-        <th></th>
-    </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Type)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Description)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
-    </tr>
-}
-
-</table>
+<!-- Main Content -->
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            @foreach (var post in Model)
+            {
+                <div class="post-preview">
+                    <a href="@Url.Action("View", "Home", new {id =post.Id})">
+                        <h2 class="post-title">
+                            @post.Title
+                        </h2>
+                        <h3 class="post-subtitle">
+                            @post.Subtitle
+                        </h3>
+                    </a>
+                    <p class="post-meta">Posted by <a href="#">Andrew</a> on @post.DateCreated</p>
+                </div>
+                <hr>
+            }
+            <!-- Pager -->
+            <ul class="pager">
+                <li class="next">
+                    <a href="#">Older Posts &rarr;</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

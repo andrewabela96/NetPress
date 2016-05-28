@@ -12,12 +12,23 @@ namespace NetPressBlog.Controllers
 {
     public class CategoryController : Controller
     {
-        private NetPressDBEntity db = new NetPressDBEntity();
+        private NetPressDBEntity1 db = new NetPressDBEntity1();
 
         // GET: Category
-        public ActionResult Index()
+        public ActionResult Index(int? id)
         {
-            return View(db.Categories.ToList());
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var blogs = db.BlogInfoes.Where(b => b.Category_Id == id);
+            var sortblogs = blogs.OrderByDescending(b => b.DateCreated);
+            var blogPub = sortblogs.Where(b => b.Status == 1);
+            if (!blogs.Any())
+            {
+                return HttpNotFound();
+            }
+            return View(blogPub.ToList());
         }
 
         // GET: Category/Details/5
