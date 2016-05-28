@@ -1,0 +1,35 @@
+﻿@model NetPressBlog.Models.BlogInfo
+
+@{
+    ViewBag.Title = Model.Title;
+}
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>@Model.Title</h1>
+                    <h2 class="subheading">@Model.Subtitle</h2>
+                    <div class="buttonrightfull">
+                        <a href="@Url.Action("Index", "Categories", new {id = Model.Category_Id})" class="btn btn-default" role="button">
+                            @Model.Category.Type
+                        </a>
+                    </div>
+                    <span class="post-meta">Posted by <a href="#">Andrew</a> on @Model.DateCreated</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <p>@Model.Text</p>
+            </div>
+        </div>
+    </div>
+</article>
