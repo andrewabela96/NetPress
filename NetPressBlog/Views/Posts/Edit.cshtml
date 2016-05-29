@@ -45,15 +45,40 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Text, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Category_Id, "Category_Id", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-5">
-                @Html.EditorFor(model => model.Text, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.DropDownList("Category_Id", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Category_Id, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="control-label col-md-2"></div>
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.Text, new { rows = 10, style = "width:85%" })
                 @Html.ValidationMessageFor(model => model.Text, "", new { @class = "text-danger" })
             </div>
         </div>
         
         <div class="form-group">
                 @Html.HiddenFor(model => model.DateCreated, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+
+        
+        <div class="row">
+            <div class="col-md-offset-2 col-md-5">
+                <a href="@Url.Action("Index")" class="btn btn-default" role="button">
+                    &larr; Back to List
+                </a>
+            </div>
+            <div class="col-md-5">
+                <div style="margin-left:30%">
+                    <div class="form-group">
+                        <input type="submit" name="Submit" value="Draft" class="btn btn-default" />
+                        <input type="submit" name="Submit" value="Publish" class="btn btn-primary" />
+                    </div>
+                </div>
+            </div>
         </div>
 
         @*<div class="form-group">
@@ -64,21 +89,15 @@
             </div>
         </div>*@
         
-        <div class="form-group">
+        @*<div class="form-group">
             @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-5">
                 @Html.EditorFor(model => model.Status, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
             </div>
-        </div>
+        </div>*@
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Category_Id, "Category_Id", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-5">
-                @Html.DropDownList("Category_Id", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.Category_Id, "", new { @class = "text-danger" })
-            </div>
-        </div>
+        
 
         @*<div class="form-group">
     @Html.LabelFor(model => model.Author_Id, "Author_Id", htmlAttributes: new { @class = "control-label col-md-2" })
@@ -95,6 +114,11 @@
         </div>
     </div>
 }
+
+<script type="text/javascript" src="http://js.nicedit.com/nicEdit-latest.js"></script>
+<script type="text/javascript">
+	bkLib.onDomLoaded(function() { nicEditors.allTextAreas() });
+</script>
 
 <div>
     @Html.ActionLink("Back to List", "Index")

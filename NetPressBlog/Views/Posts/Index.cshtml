@@ -53,7 +53,7 @@
                             @post.Category.Type
                         </a>
                     </div>
-                    @if (post.LastModified != null)
+                    @if (post.LastModified != post.DateCreated)
                     {
                         <p class="post-meta">Last Modified on @post.LastModified</p>
                     }

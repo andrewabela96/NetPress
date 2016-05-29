@@ -19,14 +19,14 @@ namespace NetPressBlog.Controllers
         [Authorize]
         public ActionResult Index()
         {
-
-            var blogInfo = db.BlogInfoes.Include(b => b.Category);
+            var blogs = db.BlogInfoes.OrderByDescending(b => b.DateCreated);
+            var blogInfo = blogs.Include(b => b.Category);
             string currUser = User.Identity.GetUserId();
-            var user = blogInfo.Where(b => b.Author_Id == currUser);/*from b in blogInfoes
-                       where (b.Author_Id == User.Identity.GetUserId())
-                       select b;*/
+            var user = blogInfo.Where(b => b.Author_Id == currUser);
+            var status = user.Where(s => s.Status == 1);
+            
 
-            return View(user.ToList());
+            return View(status.ToList());
         }
 
         // GET: Posts/Details/5
@@ -77,6 +77,7 @@ namespace NetPressBlog.Controllers
                         break;
                 }
                 blogInfo.DateCreated = DateTime.Now;
+                blogInfo.LastModified = DateTime.Now;
                 blogInfo.Author_Id = User.Identity.GetUserId();
                 db.BlogInfoes.Add(blogInfo);
                 db.SaveChanges();
@@ -111,10 +112,32 @@ namespace NetPressBlog.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [ValidateInput(false)]
         public ActionResult Edit([Bind(Include = "Id,Title,Subtitle,Text,DateCreated,LastModified,Status,Category_Id,Author_Id")] BlogInfo blogInfo)
         {
             if (ModelState.IsValid)
             {
+                string submit = Request["Submit"];
+                switch(submit)
+                {
+                    case "Publish":
+                        {
+                            blogInfo.Status = 1;
+                            break;
+
+                        }
+                    case "Draft":
+                        {
+                            blogInfo.Status = 2;
+                            break;
+                        }
+                    default:
+                        {
+                            blogInfo.Status = 2;
+                            break;
+                        }
+
+                }
                 blogInfo.LastModified = DateTime.Now;
                 blogInfo.Author_Id = User.Identity.GetUserId();
                 db.Entry(blogInfo).State = EntityState.Modified;
@@ -136,7 +159,7 @@ namespace NetPressBlog.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             BlogInfo blogInfo = db.BlogInfoes.Find(id);
-            if (blogInfo == null)
+            if ((blogInfo == null) || (blogInfo.Author_Id != User.Identity.GetUserId())) //Checks if there is 
             {
                 return HttpNotFound();
             }

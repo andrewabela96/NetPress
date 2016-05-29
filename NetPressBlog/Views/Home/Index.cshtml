@@ -39,7 +39,7 @@
                             @post.Category.Type
                         </a>
                     </div>
-                    <p class="post-meta">Posted by <a href="#">Andrew</a> on @post.DateCreated</p>
+                    <p class="post-meta">Posted by <a href="@Url.Action("Author", "Home", new { id = post.AspNetUser.UserName })">@post.AspNetUser.UserName</a> on @post.DateCreated</p>
                 </div>
                 <hr>
             }

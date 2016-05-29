@@ -16,7 +16,7 @@
                             @Model.Category.Type
                         </a>
                     </div>
-                    <span class="post-meta">Posted by <a href="#">Andrew</a> on @Model.DateCreated</span>
+                    <p class="post-meta">Posted by <a href="@Url.Action("Author", "Home", new { id = Model.AspNetUser.UserName })">@Model.AspNetUser.UserName</a> on @Model.DateCreated</p>
                 </div>
             </div>
         </div>

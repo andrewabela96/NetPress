@@ -1,19 +1,16 @@
 ﻿@model IEnumerable<NetPressBlog.Models.BlogInfo>
 
-@{
-    ViewBag.Title = Model.First().Category.Type;
-}
 
-<!-- Page Header -->
-<!-- Set your background image for this header on the line below. -->
+
+@{
+    ViewBag.Title = Model.First().AspNetUser.UserName;
+}
 <header class="intro-header">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                 <div class="site-heading">
-                    <h1>@Model.First().Category.Type</h1>
-                    <hr class="small">
-                    <span class="subheading">@Model.First().Category.Description</span>
+                    <h1>@Model.First().AspNetUser.UserName</h1>
                 </div>
             </div>
         </div>
@@ -35,7 +32,12 @@
                             @post.Subtitle
                         </h3>
                     </a>
-                    <p class="post-meta">Posted by <a href="@Url.Action("Author", "Home", new { id = post.AspNetUser.UserName })">@post.AspNetUser.UserName</a> on @post.DateCreated</p>
+                    <div class="buttonright">
+                        <a href="@Url.Action("Index", "Category", new {id =post.Category_Id})" class="btn btn-default" role="button">
+                            @post.Category.Type
+                        </a>
+                    </div>
+                    <p class="post-meta">Posted on @post.DateCreated</p>
                 </div>
                 <hr>
             }

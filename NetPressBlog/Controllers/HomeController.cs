@@ -34,6 +34,22 @@ namespace NetPressBlog.Controllers
             return View(blogInfo);
         }
 
+        public ActionResult Author(string id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var blogInfo = db.BlogInfoes.Where(d => d.AspNetUser.UserName == id);
+            var blogs = blogInfo.OrderByDescending(d => d.LastModified);
+            if (blogs == null)
+            {
+                return HttpNotFound();
+            }
+            return View(blogs);
+        }
+
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
