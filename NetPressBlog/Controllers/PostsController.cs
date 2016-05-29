@@ -100,6 +100,7 @@ namespace NetPressBlog.Controllers
             {
                 return HttpNotFound();
             }
+
             ViewBag.Author_Id = new SelectList(db.AspNetUsers, "Id", "Email", blogInfo.Author_Id);
             ViewBag.Category_Id = new SelectList(db.Categories, "Id", "Type", blogInfo.Category_Id);
             return View(blogInfo);
@@ -115,6 +116,7 @@ namespace NetPressBlog.Controllers
             if (ModelState.IsValid)
             {
                 blogInfo.LastModified = DateTime.Now;
+                blogInfo.Author_Id = User.Identity.GetUserId();
                 db.Entry(blogInfo).State = EntityState.Modified;
           
                 db.SaveChanges();
