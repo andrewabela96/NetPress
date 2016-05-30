@@ -37,8 +37,18 @@
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     <li>@Html.ActionLink("About", "About", "Home")</li>
                 </ul>
-                <label for="Search" class="sr-only">Search</label>
-                <input type="text" class="form-control" name="search" id="search" placeholder="search" />
+                @*<label for="Search" class="sr-only">Search</label>
+                <input type="text" class="form-control" name="search" id="search" placeholder="search" />*@
+                <div class="col-sm-4">
+                    <form class="navbar-form" role="search">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search" name="srch-term" id="srch-term">
+                            <div class="input-group-btn">
+                                <button class="btn btn-default" type="submit" style="padding-bottom:6px; padding-top:6px"><i class="glyphicon glyphicon-search"></i></button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
                        @Html.Partial("_LoginPartial")
             </div>
             <!-- /.navbar-collapse -->

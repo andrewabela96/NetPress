@@ -261,6 +261,7 @@ hr.small {
     margin-left: 100px;
 }
 
+
 @media only screen and (min-width: 100px) {
   .post-preview > a > .post-title {
     font-size: 36px;

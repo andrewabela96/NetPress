@@ -320,6 +320,7 @@
     <Content Include="Models\Posts.edmx.diagram">
       <DependentUpon>Posts.edmx</DependentUpon>
     </Content>
+    <None Include="Properties\PublishProfiles\NetPressBlog2016 - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
