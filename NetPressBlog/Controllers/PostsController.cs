@@ -23,10 +23,10 @@ namespace NetPressBlog.Controllers
             var blogInfo = blogs.Include(b => b.Category);
             string currUser = User.Identity.GetUserId();
             var user = blogInfo.Where(b => b.Author_Id == currUser);
-            var status = user.Where(s => s.Status == 1);
+            //var status = user.Where(s => s.Status == 1);
             
 
-            return View(status.ToList());
+            return View(user.ToList());
         }
 
         // GET: Posts/Details/5

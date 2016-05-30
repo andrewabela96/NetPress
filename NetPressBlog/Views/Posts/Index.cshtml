@@ -2,6 +2,7 @@
 
 @{
     ViewBag.Title = "Index";
+    var x = 0;
 }
 
 <!-- Page Header -->
@@ -33,42 +34,62 @@
     <div class="row">
         <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
             <ul class="nav nav-tabs">
-                <li class="active"><a href="#">Published</a></li>
-                <li><a href="#">My Drafts</a></li>
-                <li><a href="#">My Archives</a></li>
+                <li class="active"><a data-toggle="tab" href="#published">Published</a></li>
+                <li><a data-toggle="tab" href="#drafts">My Drafts</a></li>
+                <li><a data-toggle="tab" href="#archived">My Archived</a></li>
             </ul>
-            @foreach (var post in Model)
-            {
-                <div class="post-preview">
-                    <a href="@Url.Action("Edit", new {id =post.Id})">
-                        <h2 class="post-title">
-                            @post.Title
-                        </h2>
-                        <h3 class="post-subtitle">
-                            @post.Subtitle
-                        </h3>
-                    </a>
-                    <div class="buttonright">
-                        <a href="@Url.Action("Index", "Category", new {id =post.Category_Id})" class="btn btn-default" role="button">
-                            @post.Category.Type
-                        </a>
-                    </div>
-                    @if (post.LastModified != post.DateCreated)
-                    {
-                        <p class="post-meta">Last Modified on @post.LastModified</p>
-                    }
-                    else
-                    {
-                        <p class="post-meta">Created on @post.DateCreated</p>
-                    }
-                    @Html.ActionLink("Edit", "Edit", new { id = post.Id }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = post.Id })
+            <div class="tab-content">
+                <div id="published" class="tab-pane fade in active">
+                    @print(1)
                 </div>
-                <hr>
-            }
+                <div id="drafts" class="tab-pane fade">
+                    @print(2)
+                </div>
+                <div id="archived" class="tab-pane fade">
+                    @print(3)
+                </div>                    
+            </div>            
         </div>
     </div>
 </div>
+
+@helper  print(int x)
+{
+    foreach (var post in Model)
+    {
+        if (post.Status == x)
+        {
+            <div class="post-preview">
+                <a href="@Url.Action("Edit", new { id = post.Id })">
+                    <h2 class="post-title">
+                        @post.Title
+                    </h2>
+                    <h3 class="post-subtitle">
+                        @post.Subtitle
+                    </h3>
+                </a>
+                <div class="buttonright">
+                    <a href="@Url.Action("Index", "Category", new { id = post.Category_Id })" class="btn btn-default" role="button">
+                        @post.Category.Type
+                    </a>
+                </div>
+                @if (post.LastModified != post.DateCreated)
+                {
+                    <p class="post-meta">Last Modified on @post.LastModified</p>
+                }
+                else
+                {
+                    <p class="post-meta">Created on @post.DateCreated</p>
+                }
+                @Html.ActionLink("Edit", "Edit", new { id = post.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = post.Id })
+            </div>
+            <hr />
+        }
+    }
+
+}
+
 
 <script type="text/javascript">
     $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
