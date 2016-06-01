@@ -45,7 +45,7 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Category_Id, "Category_Id", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Category_Id, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-5">
                 @Html.DropDownList("Category_Id", null, htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.Category_Id, "", new { @class = "text-danger" })
@@ -55,13 +55,17 @@
         <div class="form-group">
             <div class="control-label col-md-2"></div>
             <div class="col-md-10">
-                @Html.TextAreaFor(model => model.Text, new { rows = 10, style = "width:85%" })
+                @Html.TextAreaFor(model => model.Text, new { rows = 10, style = "width:80%" })
                 @Html.ValidationMessageFor(model => model.Text, "", new { @class = "text-danger" })
             </div>
         </div>
         
         <div class="form-group">
                 @Html.HiddenFor(model => model.DateCreated, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+
+        <div class="form-group">
+                @Html.HiddenFor(model => model.Author_Id, new { htmlAttributes = new { @class = "form-control" } })
         </div>
 
         
@@ -72,7 +76,7 @@
                 </a>
             </div>
             <div class="col-md-5">
-                <div style="margin-left:30%">
+                <div class="col-md-offset-3">
                     <div class="form-group">
                         <input type="submit" name="Submit" value="Draft" class="btn btn-default" />
                         <input type="submit" name="Submit" value="Publish" class="btn btn-primary" />
@@ -107,11 +111,6 @@
             </div>
         </div>*@
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-5">
-                <input type="submit" value="Save" class="btn btn-default" />
-            </div>
-        </div>
     </div>
 }
 
@@ -120,9 +119,6 @@
 	bkLib.onDomLoaded(function() { nicEditors.allTextAreas() });
 </script>
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

@@ -18,12 +18,16 @@
         </div>
     </div>
 </header>
-<form asp-controller="HomeController" asp-action="Index" style="margin-left:80%; margin-bottom:5%">
-    <p>
-        <input type="text" name="Search">
-        <input type="submit" value="Search" />
-    </p>
-</form>
+<div class="col-md-offset-4 col-sm-4">
+    <form asp-controller="HomeController" asp-action="Index" role="search">
+        <div class="input-group" style="padding-bottom:6px; padding-top:6px">
+            <input type="text" class="form-control" placeholder="Search" name="Search" id="Search">
+            <div class="input-group-btn">
+                <button class="btn btn-default" type="submit" style="padding-bottom:6px; padding-top:6px"><i class="glyphicon glyphicon-search"></i></button>
+            </div>
+        </div>
+    </form>
+</div>
 
 <!-- Main Content -->
 <div class="container">
@@ -49,12 +53,6 @@
                 </div>
                 <hr>
             }
-            <!-- Pager -->
-            <ul class="pager">
-                <li class="next">
-                    <a href="#">Older Posts &rarr;</a>
-                </li>
-            </ul>
         </div>
     </div>
 </div>

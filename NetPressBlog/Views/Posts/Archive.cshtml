@@ -1,0 +1,96 @@
+﻿@model NetPressBlog.Models.BlogInfo
+
+@{
+    ViewBag.Title = "Archive";
+}
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <h3 style="text-align:center; margin-top:100px">Are you sure you want to archive this?</h3>
+    <div class="col-md-offset-3">
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Title)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Title)
+                @Html.HiddenFor(model=>model.Title)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Subtitle)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Subtitle)
+                @Html.HiddenFor(model => model.Subtitle)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.DateCreated)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.DateCreated)
+                @Html.HiddenFor(model => model.DateCreated)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.LastModified)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.LastModified)
+                @Html.HiddenFor(model => model.LastModified)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Status)
+                @Html.HiddenFor(model => model.Status)
+            </dt>
+
+            @if (Model.Status == 1)
+            {
+                <dd>Published</dd>
+            }
+            else if (Model.Status == 2)
+            {
+                <dd>Draft</dd>
+            }
+            else if (Model.Status == 3)
+            {
+                <dd>Archived</dd>
+            }
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Category.Id)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Category.Type)
+                @Html.HiddenFor(model => model.Category_Id)
+                @Html.HiddenFor(model=> model.Author_Id)
+                @Html.HiddenFor(model=>model.Text)
+            </dd>
+
+        </dl>
+
+        <div class="row">
+            <div class="col-md-offset-1 col-md-5">
+                <a href="@Url.Action("Index")" class="btn btn-default" role="button">
+                    &larr; Back to List
+                </a>
+            </div>
+            <div class="col-md-5">
+                <div class="form-group">
+                    <input type="submit" name="Submit" value="Archive" class="btn btn-primary" />
+                </div>
+            </div>
+        </div>
+    </div>
+}
+   
+

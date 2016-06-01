@@ -4,20 +4,32 @@
     ViewBag.Title = "Create";
 }
 
-<h2>Create</h2>
+
 
 
 @using (Html.BeginForm()) 
 {
     @Html.AntiForgeryToken()
-    
+
+    <header class="intro-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <div class="site-heading">
+                        <h1>New Category</h1>
+                        <hr class="small">
+                        <span class="subheading">Establish a new Category</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
     <div class="form-horizontal">
-        <h4>Category</h4>
-        <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
             @Html.LabelFor(model => model.Type, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
+            <div class="col-md-5">
                 @Html.EditorFor(model => model.Type, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
             </div>
@@ -26,23 +38,27 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.TextAreaFor(model => model.Description, new { rows = 10, style = "width:70%" })
                 @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
             </div>
         </div>
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+        <div class="row">
+            <div class="col-md-offset-2 col-md-5">
+                <a href="@Url.Action("Index", "Posts")" class="btn btn-default" role="button">
+                    &larr; Back to Portal
+                </a>
+            </div>
+            <div class="col-md-offset-2 col-md-3">
+                    <div class="form-group">
+                        <input type="submit" name="Submit" value="Create" class="btn btn-primary" />
+                    </div>
             </div>
         </div>
     </div>
 }
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
-
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
+<script type="text/javascript" src="http://js.nicedit.com/nicEdit-latest.js"></script>
+<script type="text/javascript">
+	bkLib.onDomLoaded(function() { nicEditors.allTextAreas() });
+</script>

@@ -1,16 +1,4 @@
 ﻿@model NetPressBlog.Models.BlogInfo
-@{
-    var formattext = "";
-    ViewBag.Title = Model.Title;
-    var output = new System.Text.StringBuilder();
-    HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
-    doc.LoadHtml(Model.Text);
-    foreach (HtmlAgilityPack.HtmlNode node in doc.DocumentNode.SelectNodes("//*"))
-    {
-        output.AppendLine(node.InnerText.ToString() + "\n");
-        formattext = output.ToString();
-    }
-}
 
 <header class="intro-header">
     <div class="container">

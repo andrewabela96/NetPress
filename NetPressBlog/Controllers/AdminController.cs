@@ -10,128 +10,116 @@ using NetPressBlog.Models;
 
 namespace NetPressBlog.Controllers
 {
-    public class CategoryController : Controller
+    public class AdminController : Controller
     {
         private NetPressDBEntity1 db = new NetPressDBEntity1();
 
-        // GET: Category
-        public ActionResult Index(int? id)
+        // GET: Admin
+        public ActionResult Index()
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            var blogs = db.BlogInfoes.Where(b => b.Category_Id == id);
-            var sortblogs = blogs.OrderByDescending(b => b.DateCreated);
-            var blogPub = sortblogs.Where(b => b.Status == 1);
-            if (!blogs.Any())
-            {
-                return HttpNotFound();
-            }
-            return View(blogPub.ToList());
+            var blogInfoes = db.BlogInfoes.Include(b => b.AspNetUser).Include(b => b.Category);
+            return View(blogInfoes.ToList());
         }
 
-        // GET: Category/Details/5
+        // GET: Admin/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Category category = db.Categories.Find(id);
-            if (category == null)
+            BlogInfo blogInfo = db.BlogInfoes.Find(id);
+            if (blogInfo == null)
             {
                 return HttpNotFound();
             }
-            return View(category);
+            return View(blogInfo);
         }
 
-        // GET: Category/Create
-        [Authorize]
+        // GET: Admin/Create
         public ActionResult Create()
         {
-            if(User.IsInRole("Admin"))
-            {
-                return View("Create", "_SideBarLayout");
-            }
-            return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            ViewBag.Author_Id = new SelectList(db.AspNetUsers, "Id", "Email");
+            ViewBag.Category_Id = new SelectList(db.Categories, "Id", "Type");
+            return View();
         }
 
-        // POST: Category/Create
+        // POST: Admin/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [ValidateInput(false)]
-        public ActionResult Create([Bind(Include = "Id,Type,Description")] Category category)
+        public ActionResult Create([Bind(Include = "Id,Title,Subtitle,Text,DateCreated,LastModified,Status,Category_Id,Author_Id")] BlogInfo blogInfo)
         {
             if (ModelState.IsValid)
             {
-                db.Categories.Add(category);
+                db.BlogInfoes.Add(blogInfo);
                 db.SaveChanges();
-                return RedirectToAction("Index", "Posts");
+                return RedirectToAction("Index");
             }
 
-            if(User.IsInRole("Admin"))
-            {
-                return View("Create","_SideBarLayout",category);
-            }
-            return View(category);
+            ViewBag.Author_Id = new SelectList(db.AspNetUsers, "Id", "Email", blogInfo.Author_Id);
+            ViewBag.Category_Id = new SelectList(db.Categories, "Id", "Type", blogInfo.Category_Id);
+            return View(blogInfo);
         }
 
-        // GET: Category/Edit/5
+        // GET: Admin/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Category category = db.Categories.Find(id);
-            if (category == null)
+            BlogInfo blogInfo = db.BlogInfoes.Find(id);
+            if (blogInfo == null)
             {
                 return HttpNotFound();
             }
-            return View(category);
+            ViewBag.Author_Id = new SelectList(db.AspNetUsers, "Id", "Email", blogInfo.Author_Id);
+            ViewBag.Category_Id = new SelectList(db.Categories, "Id", "Type", blogInfo.Category_Id);
+            return View(blogInfo);
         }
 
-        // POST: Category/Edit/5
+        // POST: Admin/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Type,Description")] Category category)
+        public ActionResult Edit([Bind(Include = "Id,Title,Subtitle,Text,DateCreated,LastModified,Status,Category_Id,Author_Id")] BlogInfo blogInfo)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(category).State = EntityState.Modified;
+                db.Entry(blogInfo).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(category);
+            ViewBag.Author_Id = new SelectList(db.AspNetUsers, "Id", "Email", blogInfo.Author_Id);
+            ViewBag.Category_Id = new SelectList(db.Categories, "Id", "Type", blogInfo.Category_Id);
+            return View(blogInfo);
         }
 
-        // GET: Category/Delete/5
+        // GET: Admin/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Category category = db.Categories.Find(id);
-            if (category == null)
+            BlogInfo blogInfo = db.BlogInfoes.Find(id);
+            if (blogInfo == null)
             {
                 return HttpNotFound();
             }
-            return View(category);
+            return View(blogInfo);
         }
 
-        // POST: Category/Delete/5
+        // POST: Admin/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Category category = db.Categories.Find(id);
-            db.Categories.Remove(category);
+            BlogInfo blogInfo = db.BlogInfoes.Find(id);
+            db.BlogInfoes.Remove(blogInfo);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

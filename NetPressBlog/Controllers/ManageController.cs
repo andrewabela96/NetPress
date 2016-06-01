@@ -215,6 +215,10 @@ namespace NetPressBlog.Controllers
         // GET: /Manage/ChangePassword
         public ActionResult ChangePassword()
         {
+            if(User.IsInRole("Admin"))
+            {
+                return View("ChangePassword", "_SideBarLayout");
+            }
             return View();
         }
 
@@ -226,6 +230,10 @@ namespace NetPressBlog.Controllers
         {
             if (!ModelState.IsValid)
             {
+                if(User.IsInRole("Admin"))
+                {
+                    return View("ChangePassword", "_SideBarLayuot",model);
+                }
                 return View(model);
             }
             var result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
@@ -236,9 +244,13 @@ namespace NetPressBlog.Controllers
                 {
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                 }
-                return RedirectToAction("Index", new { Message = ManageMessageId.ChangePasswordSuccess });
+                return RedirectToAction("Index", "Posts", new { Message = ManageMessageId.ChangePasswordSuccess });
             }
             AddErrors(result);
+            if (User.IsInRole("Admin"))
+            {
+                return View("ChangePassword", "_SideBarLayuot", model);
+            }
             return View(model);
         }
 

@@ -13,7 +13,7 @@
                 <div class="site-heading">
                     <h1>@Model.First().Category.Type</h1>
                     <hr class="small">
-                    <span class="subheading">@Model.First().Category.Description</span>
+                    <span class="subheading">@Html.Raw(Model.First().Category.Description)</span>
                 </div>
             </div>
         </div>

@@ -18,7 +18,7 @@ namespace NetPressBlog.Controllers
 
             if(!String.IsNullOrEmpty(search))
             {
-                var posts = db.BlogInfoes.Where(p => p.Title.Contains(search) || (p.AspNetUser.UserName.Contains(search)) || p.Category.Type.Contains(search));
+                var posts = db.BlogInfoes.Where(p => (p.Title.Contains(search) || (p.AspNetUser.UserName.Contains(search)) || p.Category.Type.Contains(search) || p.Text.Contains(search)) && p.Status==1);
                 //searchList.Add(posts);
 
 

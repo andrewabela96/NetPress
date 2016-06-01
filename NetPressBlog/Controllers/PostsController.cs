@@ -19,13 +19,16 @@ namespace NetPressBlog.Controllers
         [Authorize]
         public ActionResult Index()
         {
-            var blogs = db.BlogInfoes.OrderByDescending(b => b.DateCreated);
+            var blogs = db.BlogInfoes.OrderByDescending(b => b.LastModified);
+            if (User.IsInRole("Admin"))
+            {
+                return View("Index", "_SideBarLayout", blogs.ToList());
+            }
             var blogInfo = blogs.Include(b => b.Category);
             string currUser = User.Identity.GetUserId();
             var user = blogInfo.Where(b => b.Author_Id == currUser);
             //var status = user.Where(s => s.Status == 1);
-            
-
+           
             return View(user.ToList());
         }
 
@@ -50,6 +53,10 @@ namespace NetPressBlog.Controllers
         {
             ViewBag.Author_Id = new SelectList(db.AspNetUsers, "Id", "Email");
             ViewBag.Category_Id = new SelectList(db.Categories, "Id", "Type");
+            if(User.IsInRole("Admin"))
+            {
+                return View("Create", "_SideBarLayout");
+            }
             return View();
         }
 
@@ -85,6 +92,10 @@ namespace NetPressBlog.Controllers
             }
 
             ViewBag.Category_Id = new SelectList(db.Categories, "Id", "Type", blogInfo.Category_Id);
+            if (User.IsInRole("Admin"))
+            {
+                return View("Create", "_SideBarLayout", blogInfo);
+            }
             return View(blogInfo);
         }
 
@@ -97,13 +108,18 @@ namespace NetPressBlog.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             BlogInfo blogInfo = db.BlogInfoes.Find(id);
+            ViewBag.Author_Id = new SelectList(db.AspNetUsers, "Id", "Email", blogInfo.Author_Id);
+            ViewBag.Category_Id = new SelectList(db.Categories, "Id", "Type", blogInfo.Category_Id);
+            if (User.IsInRole("Admin"))
+            {
+                return View("Edit", "_SideBarLayout", blogInfo);
+            }
             if ((blogInfo == null) || (blogInfo.Author_Id != User.Identity.GetUserId())) //Checks if there is 
             {
                 return HttpNotFound();
             }
 
-            ViewBag.Author_Id = new SelectList(db.AspNetUsers, "Id", "Email", blogInfo.Author_Id);
-            ViewBag.Category_Id = new SelectList(db.Categories, "Id", "Type", blogInfo.Category_Id);
+          
             return View(blogInfo);
         }
 
@@ -139,7 +155,6 @@ namespace NetPressBlog.Controllers
 
                 }
                 blogInfo.LastModified = DateTime.Now;
-                blogInfo.Author_Id = User.Identity.GetUserId();
                 db.Entry(blogInfo).State = EntityState.Modified;
           
                 db.SaveChanges();
@@ -147,6 +162,56 @@ namespace NetPressBlog.Controllers
             }
             ViewBag.Author_Id = new SelectList(db.AspNetUsers, "Id", "Email", blogInfo.Author_Id);
             ViewBag.Category_Id = new SelectList(db.Categories, "Id", "Type", blogInfo.Category_Id);
+            if (User.IsInRole("Admin"))
+            {
+                return View("Edit", "_SideBarLayout");
+            }
+            return View(blogInfo);
+        }
+
+        [Authorize]
+        public ActionResult Archive(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            BlogInfo blogInfo = db.BlogInfoes.Find(id);
+            ViewBag.Author_Id = new SelectList(db.AspNetUsers, "Id", "Email", blogInfo.Author_Id);
+            ViewBag.Category_Id = new SelectList(db.Categories, "Id", "Type", blogInfo.Category_Id);
+            if (User.IsInRole("Admin"))
+            {
+                return View("Archive", "_SideBarLayout", blogInfo);
+            }
+            if ((blogInfo == null) || (blogInfo.Author_Id != User.Identity.GetUserId())) //Checks if there is 
+            {
+                return HttpNotFound();
+            }
+
+
+            return View(blogInfo);
+        }
+
+     
+        [HttpPost, ActionName("Archive")]
+        [ValidateInput(false)]
+        [ValidateAntiForgeryToken]
+        public ActionResult Archive([Bind(Include = "Id,Title,Subtitle,Text,DateCreated,LastModified,Status,Category_Id,Author_Id")] BlogInfo blogInfo)
+        {
+            var errors = ModelState.Values.SelectMany(v => v.Errors);
+            if (ModelState.IsValid)
+            {
+                blogInfo.Status = 3;
+                db.Entry(blogInfo).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            ViewBag.Author_Id = new SelectList(db.AspNetUsers, "Id", "Email", blogInfo.Author_Id);
+            ViewBag.Category_Id = new SelectList(db.Categories, "Id", "Type", blogInfo.Category_Id);
+            if (User.IsInRole("Admin"))
+            {
+                return View("Archive", "_SideBarLayout");
+            }
             return View(blogInfo);
         }
 
@@ -159,6 +224,10 @@ namespace NetPressBlog.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             BlogInfo blogInfo = db.BlogInfoes.Find(id);
+            if (User.IsInRole("Admin"))
+            {
+                return View("Delete", "_SideBarLayout", blogInfo);
+            }
             if ((blogInfo == null) || (blogInfo.Author_Id != User.Identity.GetUserId())) //Checks if there is 
             {
                 return HttpNotFound();
