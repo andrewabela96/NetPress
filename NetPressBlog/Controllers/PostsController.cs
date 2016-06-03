@@ -83,8 +83,10 @@ namespace NetPressBlog.Controllers
                         blogInfo.Status = 2;
                         break;
                 }
-                blogInfo.DateCreated = DateTime.Now;
-                blogInfo.LastModified = DateTime.Now;
+                DateTime dt = DateTime.Now;
+                dt = dt.AddHours(2);
+                blogInfo.DateCreated = dt;
+                blogInfo.LastModified = dt;
                 blogInfo.Author_Id = User.Identity.GetUserId();
                 db.BlogInfoes.Add(blogInfo);
                 db.SaveChanges();
@@ -154,7 +156,8 @@ namespace NetPressBlog.Controllers
                         }
 
                 }
-                blogInfo.LastModified = DateTime.Now;
+                DateTime dt = DateTime.Now;
+                blogInfo.LastModified = dt.AddHours(2);
                 db.Entry(blogInfo).State = EntityState.Modified;
           
                 db.SaveChanges();
