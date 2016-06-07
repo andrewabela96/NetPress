@@ -27,7 +27,6 @@ namespace NetPressBlog.Controllers
             var blogInfo = blogs.Include(b => b.Category);
             string currUser = User.Identity.GetUserId();
             var user = blogInfo.Where(b => b.Author_Id == currUser);
-            //var status = user.Where(s => s.Status == 1);
            
             return View(user.ToList());
         }
@@ -201,7 +200,6 @@ namespace NetPressBlog.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Archive([Bind(Include = "Id,Title,Subtitle,Text,DateCreated,LastModified,Status,Category_Id,Author_Id")] BlogInfo blogInfo)
         {
-            var errors = ModelState.Values.SelectMany(v => v.Errors);
             if (ModelState.IsValid)
             {
                 blogInfo.Status = 3;
